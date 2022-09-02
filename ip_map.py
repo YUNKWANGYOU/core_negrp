@@ -1,9 +1,10 @@
 import pandas
 import sys
-import cv2
+from collections import Counter
 
 filename = "220820_코어_IP_맵.xlsx"
-
+hop = ['one','two','three','four','five',
+       'six','seven','eight','nine']
 
 class ErrPointHandler():
     
@@ -24,10 +25,12 @@ class ErrPointHandler():
     def err_route(self):
         self.err_list = []
         
-        sys.stdout.write("에러 구간을 입력해 주세요. ( 종료하고 싶으시면  Ctrl + C 를 입력하세요. )\n\n")
+        sys.stdout.write("에러 구간을 입력해 주세요. ( 종료하고 싶으시면 Ctrl + C 를 입력하세요. )\n\n")
         try :
             while 1 : 
-               self.err_list.append(input())
+                a = input()
+                self.err_list.append(a)
+                    
         except KeyboardInterrupt :
             print("\n\n에러 구간 입력이 종료되었습니다.")
     
@@ -46,11 +49,26 @@ class ErrPointHandler():
             sys.stdout.write(i + ' / ')
     
     def err_ip_mapping(self,ip_route) : 
-        for i, j in self.err_list :
-            if i in ip_route['세대_장비(출발)'] and j in ip_route['세대_장비(도착)'] :
-                print('있음')
+        self.ip_err = []
+        for i in self.err_list :
+            condition = (ip_route.source == i[0]) & (ip_route.destination == i[1])
+            self.ip_err.append(ip_route[condition])
+        
     
-    
+    def cal_point(self) :
+        res = []
+        for i in self.ip_err : 
+            for j in hop :
+                for k in i[j].values:
+                    res.append(k)
+        res = dict(sorted(dict(Counter(res)).items(),key= lambda x: -x[1]))
+        del res['-']
+        
+        sys.stdout.write("* 장비별 에러 발생 횟수 *\n")
+        for key,value in res.items() : 
+            print(key,value)
+        # for i in hop :
+        #     print(self.ip_err[i])
 if __name__=="__main__" : 
     
     e = ErrPointHandler()
@@ -64,3 +82,5 @@ if __name__=="__main__" :
     # print(ip_route.iloc[0])
     # err_route에 해당하는 ip_route mapping 하여 불러오기
     e.err_ip_mapping(ip_route)
+    sys.stdout.write('\n')
+    e.cal_point()
