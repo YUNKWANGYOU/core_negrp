@@ -70,15 +70,13 @@ class ErrPointHandler():
         self.res = dict(sorted(dict(Counter(self.res)).items(),key= lambda x: -x[1]))
         del self.res['-']
         
-        sys.stdout.write("* 장비별 에러 발생 횟수 *\n")
-        for key,value in self.res.items() : 
-            print(key,value)
-        # for i in hop :
-        #     print(self.ip_err[i])
+        # for key,value in self.res.items() : 
+        #     print(key,value)
         
     def save_cal_point(self) :
         self.res_dict = {"name" : self.res.keys(),"err_cnt" : self.res.values()}        
         self.res_df = pandas.DataFrame(self.res_dict)
+        sys.stdout.write("* 장비별 에러 발생 횟수 *\n")
         print(self.res_df)
         self.res_df.to_csv("result.csv")
         
