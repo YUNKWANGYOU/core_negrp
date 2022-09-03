@@ -2,7 +2,7 @@ import pandas
 import sys
 from collections import Counter
 
-filename = "220820_코어_IP_맵.xlsx"
+filename = "0820_coreip.xlsx"
 hop = ['one','two','three','four','five',
        'six','seven','eight','nine']
 
@@ -61,20 +61,27 @@ class ErrPointHandler():
         
     # 에러 s/d기반으로 추출된 route에 해당하는 장비를 Count 순으로 나열 : 에러 Point 추출
     def cal_point(self) :
-        res = []
+        self.res = []
         for i in self.ip_err : 
             for j in hop :
                 for k in i[j].values:
-                    res.append(k)
-        res = dict(sorted(dict(Counter(res)).items(),key= lambda x: -x[1]))
-        del res['-']
+                    self.res.append(k)
+    
+        self.res = dict(sorted(dict(Counter(self.res)).items(),key= lambda x: -x[1]))
+        del self.res['-']
         
         sys.stdout.write("* 장비별 에러 발생 횟수 *\n")
-        for key,value in res.items() : 
+        for key,value in self.res.items() : 
             print(key,value)
         # for i in hop :
         #     print(self.ip_err[i])
-
+        
+    def save_cal_point(self) :
+        self.res_dict = {"name" : self.res.keys(),"err_cnt" : self.res.values()}        
+        self.res_df = pandas.DataFrame(self.res_dict)
+        print(self.res_df)
+        self.res_df.to_csv("result.csv")
+        
 if __name__=="__main__" : 
     
     e = ErrPointHandler()
@@ -89,3 +96,4 @@ if __name__=="__main__" :
     
     sys.stdout.write('\n')
     e.cal_point()
+    e.save_cal_point()
