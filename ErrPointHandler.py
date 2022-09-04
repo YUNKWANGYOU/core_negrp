@@ -13,7 +13,7 @@ class ErrPointHandler():
         self.err_sd = []
         self.df = pandas.read_excel(filename, sheet_name=None)
         self.sheet = list(self.df.keys())
-    
+        
     # 엑셀 전체 sheet 목록 출력 기능
     def print_sheets(self):
         sys.stdout.write("\n* Sheet 목록 : ")

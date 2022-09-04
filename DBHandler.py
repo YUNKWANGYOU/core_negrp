@@ -3,7 +3,7 @@ import logging, sqlite3, datetime
 class DatabaseHandler(logging.Handler):
     def __init__(self):
         logging.Handler.__init__(self)
-        self.database = 'moonuibee.db'
+        self.database = 'xx.db'
         self.conn = sqlite3.connect(self.database)
         self.cur = self.conn.cursor()
 
