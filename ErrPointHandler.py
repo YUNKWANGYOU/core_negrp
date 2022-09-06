@@ -1,3 +1,4 @@
+from re import S
 import pandas
 import sys
 from collections import Counter
@@ -13,6 +14,8 @@ class ErrPointHandler():
         self.err_sd = []
         self.df = pandas.read_excel(filename, sheet_name=None)
         self.sheet = list(self.df.keys())
+        self.sd_list = []
+        self.sd_merge = []
         
     # 엑셀 전체 sheet 목록 출력 기능
     def print_sheets(self):
@@ -78,20 +81,37 @@ class ErrPointHandler():
         self.res_df = pandas.DataFrame(self.res_dict)
         sys.stdout.write("* 장비별 에러 발생 횟수 *\n")
         print(self.res_df)
-        self.res_df.to_csv("result.csv")
+        self.res_df.to_csv("result/result.csv")
+        
+    def generate_sd_list(self,ip_route) : 
+        self.sd_list = ip_route[['source','destination']]
+        self.sd_list = self.sd_list.drop_duplicates(subset=None, keep='first', inplace=False, ignore_index=False)
+        # print("\n\n< 장비군 별 연동 정보 >")
+        # print(self.sd_list)
+    
+    def save_sd_list(self) :
+        self.sd_list.to_json("result/result.json",orient='columns')
+    
+    def merge_sd(self,ip_route) :
+        self.sd_merge = ip_route['source'] + "-" + ip_route['destination']
+        self.sd_merge = set(self.sd_merge)
+        self.sd_merge = list(self.sd_merge)
         
 if __name__=="__main__" : 
     
     e = ErrPointHandler()
     e.print_sheets()
-    ip_route = e.df[e.sheet[3]]
-    e.print_columns(ip_route)
+    ip_route = e.df[e.sheet[3]] # C_TOTAL_IP별 
+    e.generate_sd_list(ip_route)
+    e.merge_sd(ip_route)
+    e.save_sd_list()
+    # e.print_columns(ip_route)
     
-    sys.stdout.write('\n\n')
-    e.put_err_route()
-    e.print_err_route()
-    e.err_ip_mapping(ip_route)
+    # sys.stdout.write('\n\n')
+    # e.put_err_route()
+    # e.print_err_route()
+    # e.err_ip_mapping(ip_route)
     
-    sys.stdout.write('\n')
-    e.cal_point()
-    e.save_cal_point()
+    # sys.stdout.write('\n')
+    # e.cal_point()
+    # e.save_cal_point()
