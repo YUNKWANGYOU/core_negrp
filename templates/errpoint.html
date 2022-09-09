@@ -1,85 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error Point </title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <title>Error Point </title>
+    </head>
+    <body>
+        <form action="/errpoint" name="form1" method="post" >
+            <table border="1" align="center"  class="member">
+                
+                <caption>에러 연동 구간을 선택해주세요.</caption>
+                <tr>
+                <td width="50%">
+                    <select id="select" name="sel1" size="10" multiple ></select>
+                </td>
+                <td width="30" align="center"><input type="button" value=" ▶ " onclick="addItem()"><br><br><input type="button" value=" ◀ " onclick="removeItem()"></td>
+                    <td width="50%">
+                        <select name="sel2" size="10" multiple></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="3">
+                        <input id="submit" type="submit" value="IP 장비별 에러확률 확인하기">
+                    </td>
+                </tr>
+                
+            </table>
+        </form>
+
+        <table id ="result_table" border="1" align="center" class="member">
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+        </table>
 
 
+        <script language="JavaScript">
+            array = '{{sd_merge}}'.split('//');
+            console.log(array[0]);
+            console.log(typeof(array));
+            array = array.sort();
 
-<form name="form1" method="get" action="" >
-    <table border="1" align="center"  class="member">
-        
-        <caption>에러 연동 구간을 선택해주세요.</caption>
-        <tr>
-        <td width="50%">
-            <select id="select" name="sel1" size="10" multiple ></select>
-        </td>
-        <td width="30" align="center"><input type="button" value=" ▶ " onclick="addItem()"><br><br><input type="button" value=" ◀ " onclick="removeItem()"></td>
-        <td width="50%">
-            <select name="sel2" size="10" multiple></select>
-        </td>
-        </tr>
-     
-        <tr>
-        <td align="center" colspan="3">
-            <input type="submit" value="IP 장비별 에러 Weight 확인하기"></td>
-        </tr>
-    </table>
-</form>
+            var frm1 = document.form1;
 
-
-<script language="JavaScript">
-    array = '{{sd_merge}}'.split('//');
-    console.log(array[0]);
-    console.log(typeof(array));
-    array = array.sort();
-
-    var frm = document.form1;
-    frm.sel1.options = array;   
-
-    for (var i = 0; i < array.length; i++) { 
-        var option = document.createElement("option");
-        option.value = i+1;
-        option.text = array[i];
-        frm.sel1.appendChild(option); 
-    }
-
-    function addItem(){   
-        var cnt = frm.sel1.options.length;
-        var cnt2 = 0;
-        
-        for (var i=0 ; i < cnt ; i++){
-            if(frm.sel1.options[i].selected == true){
-                frm.sel2.options.add(new Option(frm.sel1.options[i].text, frm.sel1.options[i].value));
-                cnt2++;
+            for (var i = 0; i < array.length; i++) { 
+                var option = document.createElement("option");
+                option.value = i+1;
+                option.text = array[i];
+                frm1.sel1.appendChild(option); 
             }
-        }
-        for (var i=0 ; i < cnt2 ; i++){
-            frm.sel1.options.remove(frm.sel1.selectedIndex);
-        }
-    }
-    
-    function removeItem(){ 
-        var cnt = frm.sel2.options.length;
-        var cnt2 = 0;
 
-        for (var i=0 ; i < cnt ; i++){
-            if(frm.sel2.options[i].selected == true){
-                frm.sel1.options.add(new Option(frm.sel2.options[i].text, frm.sel2.options[i].value));
-                cnt2++;
+            const button = document.getElementById('submit');
+            button.onclick = function() {
+                var selected = [];
+                for (var option of frm1.sel2.options)
+                {
+                    selected.push(option.text);
+                }
+                var myJsonString = JSON.stringify(selected);
+                alert(selected);
+                console.log(myJsonString)
+        
+                $.ajax({
+                    type : 'post',
+                    contentType : 'application/json',
+                    url : '/errpoint/data',
+                    dataType : 'json',
+                    data : myJsonString
+                });
             }
-        }
-        for (var i=0 ; i < cnt2 ; i++){
-            frm.sel2.options.remove(frm.sel2.selectedIndex);
-        }
-    }
-</script>
-</body>
+            
+            var result2 = '{{result}}';
+            result2 = result2.replace(/&#39;/gi,'')
+            result2 = result2.replace(/{/gi,'')
+            result2 = result2.replace(/}/gi,'')
+            result2 = result2.split(',');
+            console.log(result2);
+        
+
+            function addItem(){   
+                var cnt = frm1.sel1.options.length;
+                var cnt2 = 0;
+                
+                for (var i=0 ; i < cnt ; i++){
+                    if(frm1.sel1.options[i].selected == true){
+                        frm1.sel2.options.add(new Option(frm1.sel1.options[i].text, frm1.sel1.options[i].value));
+                        cnt2++;
+                    }
+                }
+                for (var i=0 ; i < cnt2 ; i++){
+                    frm1.sel1.options.remove(frm1.sel1.selectedIndex);
+                }
+            }
+            
+            function removeItem(){ 
+                var cnt = frm1.sel2.options.length;
+                var cnt2 = 0;
+
+                for (var i=0 ; i < cnt ; i++){
+                    if(frm1.sel2.options[i].selected == true){
+                        frm1.sel1.options.add(new Option(frm1.sel2.options[i].text, frm1.sel2.options[i].value));
+                        cnt2++;
+                    }
+                }
+                for (var i=0 ; i < cnt2 ; i++){
+                    frm1.sel2.options.remove(frm1.sel2.selectedIndex);
+                }
+            }
+
+        </script>
+    </body>
 </html>
+
 
 
 <style>
@@ -96,13 +132,11 @@
         height: 100vh;
         justify-content: center;
         align-items: center;
-        background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+        background-image: linear-gradient(45deg, #85b0f6 0%, #d5effb 100%);
     }
-    /* Table */
     table {
         text-align: center;
     }
-
     .member {
         width:80%; 
         height:500px;
@@ -112,7 +146,7 @@
     }
     .member caption {
         padding-top : 13px;
-        margin-top : 30px ;
+        margin-top : 50px ;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
         width: 100%;
         height:50px;
@@ -124,7 +158,6 @@
         font-weight: bold;
         border : none;
     }
-
     .member td {
 
         border-radius: 4px;
@@ -147,8 +180,24 @@
         -moz-text-align-last: center;
     }
 
+    input[type=button] {
+        width: 40px;
+        height:40px;
+        background-color: orange;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        }
+    input[type=button]:hover {
+        background-color: rgb(1, 172, 61);
+        }
+
     input[type=submit] {
-        width: 400px;
+        width:400px;
         height:50px;
         background-color: orange;
         color: white;

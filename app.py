@@ -1,14 +1,17 @@
 from flask import Flask, render_template
-from NetworkGraphHandler import NetworkGraphHandler
+from flask import request
 import plotly.figure_factory as ff 
 import plotly
 import json
 import numpy as np
 import pandas as pd
-import ErrPointHandler
-import DBHandler
 import sys
 import os
+
+from NetworkGraphHandler import NetworkGraphHandler
+import ErrPointHandler
+import DBHandler
+
 
 app = Flask(__name__) 
 e = ErrPointHandler.ErrPointHandler()
@@ -25,7 +28,14 @@ def errpoint():
     set_errpoint()
     negrp = generate_graph() 
     e.sd_merge = '//'.join([str(i) for i in list(e.sd_merge)])
-    return render_template("errpoint.html",sd_merge=e.sd_merge,plot=negrp)
+    return render_template("errpoint.html",sd_merge=e.sd_merge,plot=negrp,result=e.res)
+
+@app.route('/errpoint/data', methods=['GET','POST'])
+def post():
+    if request.method == 'POST':
+        value = request.get_json(silent=True)
+        res = cal_errpoint(value)
+    return render_template('post.html')
 
 #----- Function -----#
 def generate_graph():
@@ -46,10 +56,10 @@ def set_errpoint():
     e.merge_sd(ip_route)
     e.save_sd_list()
 
-def errpoint():
+def cal_errpoint(value):
     e.print_columns(ip_route)
     sys.stdout.write('\n\n')
-    e.put_err_route()
+    e.put_err_route(value)
     e.print_err_route()
     e.err_ip_mapping(ip_route)
     sys.stdout.write('\n')

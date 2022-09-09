@@ -1,7 +1,7 @@
-from re import S
 import pandas
 import sys
 from collections import Counter
+import json 
 
 filename = "0820_coreip.xlsx"
 hop = ['one','two','three','four','five',
@@ -16,6 +16,8 @@ class ErrPointHandler():
         self.sheet = list(self.df.keys())
         self.sd_list = []
         self.sd_merge = []
+        self.res = []
+        self.res_string = ''
         
     # 엑셀 전체 sheet 목록 출력 기능
     def print_sheets(self):
@@ -26,18 +28,12 @@ class ErrPointHandler():
     
     # 연동 에러 쉬트와 IP Route 쉬트 표준화 필요  ex) SPGW#155 -> NSA_SPGW 
     # 에러 구간 입력 기능
-    def put_err_route(self):
+    def put_err_route(self,value):
         self.err_list = []
+        for i in value :
+            self.err_list.append(i.replace('↔',' '))
+        print(self.err_list)
         
-        sys.stdout.write("에러 구간을 입력해 주세요. ( 종료하고 싶으시면 Ctrl + C 를 입력하세요. )\n\n")
-        try :
-            while 1 : 
-                a = input()
-                self.err_list.append(a)
-                    
-        except KeyboardInterrupt :
-            print("\n\n에러 구간 입력이 종료되었습니다.")
-    
     # 에러 구간 프린트 기능
     def print_err_route(self):
         sys.stdout.write("\n에러 구간 확인 : \n" )
@@ -72,6 +68,7 @@ class ErrPointHandler():
     
         self.res = dict(sorted(dict(Counter(self.res)).items(),key= lambda x: -x[1]))
         del self.res['-']
+        self.res_json = json.dumps(self.res)
         
         # for key,value in self.res.items() : 
         #     print(key,value)
@@ -93,7 +90,7 @@ class ErrPointHandler():
         self.sd_list.to_json("result/result.json",orient='columns')
     
     def merge_sd(self,ip_route) :
-        self.sd_merge = ip_route['source'] + "-" + ip_route['destination']
+        self.sd_merge = ip_route['source'] + "↔" + ip_route['destination']
         self.sd_merge = set(self.sd_merge)
         self.sd_merge = list(self.sd_merge)
         
