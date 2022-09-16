@@ -5,6 +5,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+        <script src="chosen.jquery.js" type="text/javascript"></script>
+
         <title>Error Point </title>
     </head>
     <body>
@@ -18,12 +22,12 @@
                 </td>
                 <td width="30" align="center"><input type="button" value=" ▶ " onclick="addItem()"><br><br><input type="button" value=" ◀ " onclick="removeItem()"></td>
                     <td width="50%">
-                        <select name="sel2" size="10" multiple></select>
+                        <select id="select" name="sel2" size="10"  multiple></select>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" colspan="3">
-                        <input id="submit" type="submit" value="IP 장비별 에러확률 확인하기">
+                        <input id="submit" type="submit" value="IP 장비별 에러 Weight 확인하기">
                     </td>
                 </tr>
                 
@@ -37,6 +41,7 @@
 
 
         <script language="JavaScript">
+
             array = '{{sd_merge}}'.split('//');
             console.log(array[0]);
             console.log(typeof(array));
@@ -50,6 +55,7 @@
                 option.text = array[i];
                 frm1.sel1.appendChild(option); 
             };
+
 
             const button = document.getElementById('submit');
             button.onclick = function() {
@@ -95,9 +101,6 @@
                 res_tbl.appendChild(trvalue)
             }
 
-
-            
-
             function addItem(){   
                 var cnt = frm1.sel1.options.length;
                 var cnt2 = 0;
@@ -129,6 +132,7 @@
             }
 
         </script>
+        <
     </body>
 </html>
 

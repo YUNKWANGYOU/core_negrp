@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <script type="text/javascript" src="<c:url value="/resources/js/chosen.jquery.js"/>" charset="utf-8"/></script>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/chosen.css"/>">
+
+
+    <title>Document</title>
+</head>
+<body>
+    <table height="30" cellspacing="0" cellpadding="0"> 
+        <form name="fsearchbox" method="get" action="javascript:fsearchbox_submit(document.fsearchbox);"> 
+        <input type="hidden" name="sfl" value="wr_subject||wr_content"> 
+        <input type="hidden" name="sop" value="and"> 
+          <tr> 
+            <td width="5"></td> 
+            <td align="center" style="padding-top:1px;"> 
+        <? 
+          $group_select = "<select id='head_gr_id' name='gr_id' class=select> 
+          <option value=''>통합검색"; 
+          $sql = " select gr_id, gr_subject from $g4[group_table] order by gr_id "; 
+          $result = sql_query($sql); 
+          for ($i=0; $row=sql_fetch_array($result); $i++) 
+          $group_select .= "<option value='$row[gr_id]'>$row[gr_subject]"; 
+          $group_select .= "</select>"; 
+        ?> 
+        <?=$group_select?></td> 
+            <td valign="middle" align="right"><INPUT name=stx class='text_box' itemname="검색어" size=10 minlength="2" maxlength='20'></td> 
+            <td><input type="image" src="/v1/images/btn_search.gif" border="0"></td> 
+          </tr> 
+        </form> 
+        </table> 
+        <script language="JavaScript"> 
+        function fsearchbox_submit(f) 
+        { 
+        if (f.stx.value == '') 
+        { 
+        alert("검색어를 입력하세요."); 
+        f.stx.select(); 
+        f.stx.focus(); 
+        return; 
+        } 
+        
+        /* 
+        // 검색에 많은 부하가 걸리는 경우 이 주석을 제거하세요. 
+        var cnt = 0; 
+        for (var i=0; i<f.stx.value.length; i++) 
+        { 
+        if (f.stx.value.charAt(i) == ' ') 
+        cnt++; 
+        } 
+        
+        if (cnt > 1) 
+        { 
+        alert("빠른 검색을 위하여 검색어에 공백은 한개만 입력할 수 있습니다."); 
+        f.stx.select(); 
+        f.stx.focus(); 
+        return; 
+        } 
+        */ 
+        
+        f.action = "<?=$g4[bbs_path]?>/search.php"; 
+        f.submit(); 
+        } 
+        </script> 
+        
+</body>
+</html>

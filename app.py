@@ -15,7 +15,7 @@ import DBHandler
 
 app = Flask(__name__) 
 e = ErrPointHandler.ErrPointHandler()
-ip_route = e.df[e.sheet[3]] # C_TOTAL_IP별 
+ip_route = e.df[e.sheet[0]] # C_TOTAL_IP별 
 
 #----- App. Route -----#
 @app.route("/index")

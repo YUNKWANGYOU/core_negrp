@@ -3,7 +3,9 @@ import sys
 from collections import Counter
 import json 
 
-filename = "0820_coreip.xlsx"
+filename = "ss_core_ip.xlsx"
+filename = "0912_coreip.xlsx"
+
 hop = ['one','two','three','four','five',
        'six','seven','eight','nine']
 
@@ -31,7 +33,7 @@ class ErrPointHandler():
     def put_err_route(self,value):
         self.err_list = []
         for i in value :
-            self.err_list.append(i.replace('↔',' '))
+            self.err_list.append(i.replace('⇔',' '))
         print(self.err_list)
         
     # 에러 구간 프린트 기능
@@ -90,7 +92,7 @@ class ErrPointHandler():
         self.sd_list.to_json("result/result.json",orient='columns')
     
     def merge_sd(self,ip_route) :
-        self.sd_merge = ip_route['source'] + "↔" + ip_route['destination']
+        self.sd_merge = ip_route['source'] + "⇔" + ip_route['destination']
         self.sd_merge = set(self.sd_merge)
         self.sd_merge = list(self.sd_merge)
         
@@ -98,7 +100,7 @@ if __name__=="__main__" :
     
     e = ErrPointHandler()
     e.print_sheets()
-    ip_route = e.df[e.sheet[3]] # C_TOTAL_IP별 
+    ip_route = e.df[e.sheet[0]] # C_TOTAL_IP별 
     e.generate_sd_list(ip_route)
     e.merge_sd(ip_route)
     e.save_sd_list()
