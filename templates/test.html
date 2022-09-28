@@ -1,71 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <script type="text/javascript" src="<c:url value="/resources/js/chosen.jquery.js"/>" charset="utf-8"/></script>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/chosen.css"/>">
-
-
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <title>Document</title>
 </head>
 <body>
-    <table height="30" cellspacing="0" cellpadding="0"> 
-        <form name="fsearchbox" method="get" action="javascript:fsearchbox_submit(document.fsearchbox);"> 
-        <input type="hidden" name="sfl" value="wr_subject||wr_content"> 
-        <input type="hidden" name="sop" value="and"> 
-          <tr> 
-            <td width="5"></td> 
-            <td align="center" style="padding-top:1px;"> 
-        <? 
-          $group_select = "<select id='head_gr_id' name='gr_id' class=select> 
-          <option value=''>통합검색"; 
-          $sql = " select gr_id, gr_subject from $g4[group_table] order by gr_id "; 
-          $result = sql_query($sql); 
-          for ($i=0; $row=sql_fetch_array($result); $i++) 
-          $group_select .= "<option value='$row[gr_id]'>$row[gr_subject]"; 
-          $group_select .= "</select>"; 
-        ?> 
-        <?=$group_select?></td> 
-            <td valign="middle" align="right"><INPUT name=stx class='text_box' itemname="검색어" size=10 minlength="2" maxlength='20'></td> 
-            <td><input type="image" src="/v1/images/btn_search.gif" border="0"></td> 
-          </tr> 
-        </form> 
-        </table> 
-        <script language="JavaScript"> 
-        function fsearchbox_submit(f) 
-        { 
-        if (f.stx.value == '') 
-        { 
-        alert("검색어를 입력하세요."); 
-        f.stx.select(); 
-        f.stx.focus(); 
-        return; 
-        } 
-        
-        /* 
-        // 검색에 많은 부하가 걸리는 경우 이 주석을 제거하세요. 
-        var cnt = 0; 
-        for (var i=0; i<f.stx.value.length; i++) 
-        { 
-        if (f.stx.value.charAt(i) == ' ') 
-        cnt++; 
-        } 
-        
-        if (cnt > 1) 
-        { 
-        alert("빠른 검색을 위하여 검색어에 공백은 한개만 입력할 수 있습니다."); 
-        f.stx.select(); 
-        f.stx.focus(); 
-        return; 
-        } 
-        */ 
-        
-        f.action = "<?=$g4[bbs_path]?>/search.php"; 
-        f.submit(); 
-        } 
-        </script> 
-        
+
+  <div style="width:100%; display:flex; justify-content: center; align-items: center;">
+    <span style="margin-top : 30px; margin-bottom : 20px;width:90%; display:flex; justify-content: center; align-items: center; font-size:40px; font-weight:900;">Source</span>
+    <span style="margin-top : 30px; margin-bottom : 20px;width:90%; display:flex; justify-content: center; align-items: center; font-size:40px; font-weight:900;">Destination</span>
+  </div>
+
+  <div style="display:flex; justify-content: center; align-items: center;">
+      <select name="source" id="source" class="js-example-basic-single" style="width: 40%; text-align:center;" >
+      </select> 
+      <select name="destination" id="destination" class="js-example-basic-single" style="width: 40%;text-align:center;">
+      </select>
+  </div>
+
+  <div style="display:flex; justify-content: center; align-items: center;">
+    <input type="button" value=" ↓ " onclick="addItem()" >
+    <input type="button" value=" ↑ " onclick="removeItem()" style="margin-left:10px;" >
+  </div>
+
+  <div  >
+    <form name="form1" method="post" style="display:flex; justify-content: center; align-items: center;" >
+      <table class=member >
+          <td >
+              <select id="sellist" name="sellist" multiple  >
+              </select>
+          </td>
+      </table>
+    </form>
+  </div>
+
+  <span style="display:flex; justify-content: center; align-items: center;">
+     <input type="submit" onclick="getResult()" style="width:80%; margin-bottom:10px;"  value='↓ 연동 알람 중복 구간 횟수 확인 ↓'>
+  </span>
+
+  <div>
+    <table id ="result" border="1" align="center" class="member">
+                <th>장비</th>
+                <th>연동 알람 중복 구간 횟수</th>
+    </table>
+  </div>
 </body>
+
+<script>
+  var source = '{{source}}';
+  source = source.replaceAll(/&#34;/gi,'"');
+  var source_json = JSON.parse(source);
+  var source = Object.keys(source_json);
+  console.log(Object.keys(source_json));
+  
+  var destination = '{{destination}}';
+  destination = destination.replaceAll(/&#34;/gi,'"');
+  var destination_json = JSON.parse(destination);
+  var destination = Object.keys(destination_json);
+  console.log(Object.keys(destination_json));
+
+  var sel1 = document.getElementById('source');
+  var sel2 = document.getElementById('destination');
+  for (var i = 0; i < source.length; i++) { 
+      var option = document.createElement("option");
+      option.value = i+1;
+      option.text = source[i];
+      sel1.appendChild(option)
+  }; 
+
+  for (var j = 0; j < destination.length; j++) { 
+      var option = document.createElement("option");
+      option.value = j+1;
+      option.text = destination[j];
+      sel2.appendChild(option)
+      
+  }; 
+
+  var cnt = 0
+  var sellist = document.getElementById('sellist');
+
+  function addItem(){
+    var value1 = sel1.value;
+    var text1 = sel1.options[sel1.selectedIndex].text;
+    console.log(text1);
+
+    var value2 = sel2.value;
+    var text2 = sel2.options[sel2.selectedIndex].text;
+    console.log(text2);
+
+    var option = document.createElement("option");
+    option.value = cnt+1;
+    option.text = text1+' <-> '+text2;
+    sellist.appendChild(new Option(option.text,option.value))
+    
+    cnt = cnt + 1;
+  };
+
+  function removeItem(){ 
+    var len = sellist.options.length;
+
+    for (var i=0 ; i < len ; i++){
+        sellist.options.remove(sellist.selectedIndex);
+    }
+
+    cnt = cnt-1;
+  };
+
+  function getResult(){
+    var items = [];
+    for (var option of sellist.options)
+    {
+        items.push(option.text);
+    }
+    var myJsonString = JSON.stringify(items);
+    console.log(myJsonString)
+
+    $.ajax({
+        type : 'post',
+        contentType : 'application/json',
+        url : '/test/data',
+        dataType : 'json',
+        data : myJsonString
+    });
+    window.location.reload();
+  };
+
+  var result2 = '{{result}}';
+  result2 = result2.replace(/&#39;/gi,'')
+  result2 = result2.replace(/{/gi,'')
+  result2 = result2.replace(/}/gi,'')
+  result2 = result2.split(',');
+  console.log(result2);
+
+  var res_tbl= document.getElementById('result')
+  for (var value of result2){
+    tmp = value.split(':')
+    trvalue = document.createElement('tr')
+    td1 = document.createElement('td')
+    td2 = document.createElement('td')
+    
+    td1.innerText = tmp[0]
+    td2.innerText = tmp[1]
+    
+    trvalue.appendChild(td1)
+    trvalue.appendChild(td2)
+
+    res_tbl.appendChild(trvalue)
+  }
+
+  // In your Javascript
+  $(document).ready(function() {
+    $('.js-example-basic-single').select2({
+      placeholder: 'Select an option'
+    });
+  });
+
+  </script>
 </html>
+
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500&display=swap');
+  * {
+      box-sizing: border-box;
+  }
+  body {
+      font-family: 'Montserrat', sans-serif;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.6em;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-image: linear-gradient(45deg, #85b0f6 0%, #d5effb 100%);
+  }
+  table {
+      text-align: center;
+  }
+
+  tbody td{
+    display:flex; 
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+  }
+  .member {
+      width:80%; 
+      height:250px;
+      background-color: #fff;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  }
+  .member caption {
+      padding-top : 13px;
+      margin-top : 50px ;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      height:50px;
+      background-color: orange;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: bold;
+      border : none;
+  }
+  .member td {
+      height: 100%;
+      border-radius: 4px;
+      border: none;
+  }
+  .member tr {
+
+      border-radius: 4px;
+      border: 1px solid #eee;
+  }
+  .member select {
+      font-size: x-large;
+      border-radius: 4px;
+      border : 1px solid #eee;
+      width : 100%;
+      height : 100%;
+      text-align-last: center;
+      text-align: center;
+      -ms-text-align-last: center;
+      -moz-text-align-last: center;
+  }
+
+  input[type=button] {
+      width: 55px;
+      height:55px;
+      background-color: orange;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 25px;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      }
+  input[type=button]:hover {
+      background-color: rgb(1, 172, 61);
+      }
+
+  input[type=submit] {
+      width:400px;
+      height:50px;
+      background-color: orange;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+      }
+  input[type=submit]:hover {
+      background-color: OrangeRed;
+      }
+  input[type=text]:focus {
+  background-color: lightblue;
+  border: 3px solid #555;
+  }
+
+
+</style>

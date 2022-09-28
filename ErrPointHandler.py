@@ -3,11 +3,9 @@ import sys
 from collections import Counter
 import json 
 
-filename = "ss_core_ip.xlsx"
-filename = "0912_coreip.xlsx"
+filename = "CORE_IP.xlsx"
 
-hop = ['one','two','three','four','five',
-       'six','seven','eight','nine']
+hop = ['HOP1','HOP2','HOP3','HOP4','HOP5','HOP6','HOP7','HOP8','HOP9']
 
 # 고장 Point를 다루는 클래스
 class ErrPointHandler():    
@@ -17,9 +15,10 @@ class ErrPointHandler():
         self.df = pandas.read_excel(filename, sheet_name=None)
         self.sheet = list(self.df.keys())
         self.sd_list = []
-        self.sd_merge = []
+        self.sd_merge = {'source':{},'destination':{}}
         self.res = []
         self.res_string = ''
+        self.err_list = []
         
     # 엑셀 전체 sheet 목록 출력 기능
     def print_sheets(self):
@@ -33,7 +32,8 @@ class ErrPointHandler():
     def put_err_route(self,value):
         self.err_list = []
         for i in value :
-            self.err_list.append(i.replace('⇔',' '))
+            self.err_list.append(i.replace('<-> ',' '))
+        self.err_list = list(set(self.err_list))
         print(self.err_list)
         
     # 에러 구간 프린트 기능
@@ -46,6 +46,7 @@ class ErrPointHandler():
             print(j[0] + " -> " + j[1])
         self.err_list = tmp
     
+    
     # sheet의 컬럼명 프린트 기능
     def print_columns(self,sheet) :
         sys.stdout.write("\n* 현재 Sheet 컬럼명 : / ")
@@ -57,7 +58,7 @@ class ErrPointHandler():
     def err_ip_mapping(self,ip_route) : 
         self.ip_err = []
         for i in self.err_list :
-            condition = (ip_route.source == i[0]) & (ip_route.destination == i[1])
+            condition = (ip_route.source == i[0]) & (ip_route.destination  == i[1])
             self.ip_err.append(ip_route[condition])
         
     # 에러 s/d기반으로 추출된 route에 해당하는 장비를 Count 순으로 나열 : 에러 Point 추출
@@ -69,7 +70,8 @@ class ErrPointHandler():
                     self.res.append(k)
     
         self.res = dict(sorted(dict(Counter(self.res)).items(),key= lambda x: -x[1]))
-        del self.res['-']
+        if '-' in self.res :
+            del self.res['-']
         self.res_json = json.dumps(self.res)
         
         # for key,value in self.res.items() : 
@@ -84,10 +86,13 @@ class ErrPointHandler():
         
     def generate_sd_list(self,ip_route) : 
         self.sd_list = ip_route[['source','destination']]
-        self.sd_list = self.sd_list.drop_duplicates(subset=None, keep='first', inplace=False, ignore_index=False)
-        # print("\n\n< 장비군 별 연동 정보 >")
-        # print(self.sd_list)
-    
+        for idx,row in self.sd_list.iterrows() :
+            self.sd_merge['source'][row['source']]=idx
+            self.sd_merge['destination'][row['destination']]=idx
+
+        self.source_json = json.dumps(self.sd_merge['source'])
+        self.destination_json = json.dumps(self.sd_merge['destination'])
+        
     def save_sd_list(self) :
         self.sd_list.to_json("result/result.json",orient='columns')
     
@@ -100,10 +105,10 @@ if __name__=="__main__" :
     
     e = ErrPointHandler()
     e.print_sheets()
-    ip_route = e.df[e.sheet[0]] # C_TOTAL_IP별 
+    ip_route = e.df[e.sheet[0]] 
     e.generate_sd_list(ip_route)
-    e.merge_sd(ip_route)
-    e.save_sd_list()
+    # e.merge_sd(ip_route)
+    # e.save_sd_list()
     # e.print_columns(ip_route)
     
     # sys.stdout.write('\n\n')

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask import request
 import plotly.figure_factory as ff 
 import plotly
@@ -15,7 +15,8 @@ import DBHandler
 
 app = Flask(__name__) 
 e = ErrPointHandler.ErrPointHandler()
-ip_route = e.df[e.sheet[0]] # C_TOTAL_IP별 
+ip_route = e.df[e.sheet[0]] 
+result = []
 
 #----- App. Route -----#
 @app.route("/index")
@@ -23,20 +24,31 @@ def index():
     negrp = generate_graph() 
     return render_template("index.html",plot=negrp)
 
-@app.route("/errpoint",methods=['get','post'])
-def errpoint():
-    set_errpoint()
-    negrp = generate_graph() 
-    e.sd_merge = '//'.join([str(i) for i in list(e.sd_merge)])
-    return render_template("errpoint.html",sd_merge=e.sd_merge,plot=negrp,result=e.res)
+# @app.route("/errpoint",methods=['get','post'])
+# def errpoint():
+#     set_errpoint()
+#     negrp = generate_graph() 
+#     e.sd_merge = '//'.join([str(i) for i in list(e.sd_merge)])
+#     return render_template("errpoint.html",sd_merge=e.sd_merge,plot=negrp,result=e.res)
 
-@app.route('/errpoint/data', methods=['GET','POST'])
-def post():
+# @app.route('/errpoint/data', methods=['GET','POST'])
+# def post():
+#     if request.method == 'POST':
+#         value = request.get_json(silent=True)
+#         res = cal_errpoint(value)
+#     return render_template('post.html')
+
+@app.route("/test",methods=['get','post'])
+def coreip_api():
+    set_errpoint()
+    return render_template('test.html',source=e.source_json,destination=e.destination_json,result=e.res)
+
+@app.route("/test/data",methods=['get','post'])
+def post2():
     if request.method == 'POST':
         value = request.get_json(silent=True)
-        res = cal_errpoint(value)
+        cal_errpoint(value)
     return render_template('post.html')
-
 #----- Function -----#
 def generate_graph():
     negrp = NetworkGraphHandler()
@@ -53,8 +65,8 @@ def generate_graph():
 def set_errpoint():
     e.print_sheets()
     e.generate_sd_list(ip_route)
-    e.merge_sd(ip_route)
-    e.save_sd_list()
+    # e.merge_sd(ip_route)
+    # e.save_sd_list()
 
 def cal_errpoint(value):
     e.print_columns(ip_route)
