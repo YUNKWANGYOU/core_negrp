@@ -6,15 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <link href="https://i.ibb.co/RY0XRhR/logo.png" rel="shortcut icon" type="image/x-icon">
+  <title>고장 Point 도출 Web</title>
 </head>
 <body>
-
-  <div style="width:100%; display:flex; justify-content: center; align-items: center;">
-    <span style="margin-top : 30px; margin-bottom : 20px;width:90%; display:flex; justify-content: center; align-items: center; font-size:40px; font-weight:900;">Source</span>
-    <span style="margin-top : 30px; margin-bottom : 20px;width:90%; display:flex; justify-content: center; align-items: center; font-size:40px; font-weight:900;">Destination</span>
+  <div class='container2'>
+    <img src="https://i.ibb.co/3Nxx3BY/ErrPoint.png" style="margin-bottom:20px; margin-top:20px; width:50%;">
   </div>
+
+  <div class='container1'>
+    <div class='outer-div'>
+      <div class='inner-div'>
+        Source
+      </div>
+    </div>
+    <div class='outer-div'>
+      <div class='inner-div'>
+        Destination
+      </div>
+    </div>
+  </div>
+
+  </div><div style="clear:both;"></div>
 
   <div style="display:flex; justify-content: center; align-items: center;">
       <select name="source" id="source" class="js-example-basic-single" style="width: 40%; text-align:center;" >
@@ -43,8 +57,8 @@
      <input type="submit" onclick="getResult()" style="width:80%; margin-bottom:10px;"  value='↓ 연동 알람 중복 구간 횟수 확인 ↓'>
   </span>
 
-  <div>
-    <table id ="result" border="1" align="center" class="member">
+  <div style >
+    <table id ="result" border="1" align="center" class="member2" style="text-align:center; margin-bottom : 30px; ">
                 <th>장비</th>
                 <th>연동 알람 중복 구간 횟수</th>
     </table>
@@ -84,52 +98,6 @@
   var cnt = 0
   var sellist = document.getElementById('sellist');
 
-  function addItem(){
-    var value1 = sel1.value;
-    var text1 = sel1.options[sel1.selectedIndex].text;
-    console.log(text1);
-
-    var value2 = sel2.value;
-    var text2 = sel2.options[sel2.selectedIndex].text;
-    console.log(text2);
-
-    var option = document.createElement("option");
-    option.value = cnt+1;
-    option.text = text1+' <-> '+text2;
-    sellist.appendChild(new Option(option.text,option.value))
-    
-    cnt = cnt + 1;
-  };
-
-  function removeItem(){ 
-    var len = sellist.options.length;
-
-    for (var i=0 ; i < len ; i++){
-        sellist.options.remove(sellist.selectedIndex);
-    }
-
-    cnt = cnt-1;
-  };
-
-  function getResult(){
-    var items = [];
-    for (var option of sellist.options)
-    {
-        items.push(option.text);
-    }
-    var myJsonString = JSON.stringify(items);
-    console.log(myJsonString)
-
-    $.ajax({
-        type : 'post',
-        contentType : 'application/json',
-        url : '/test/data',
-        dataType : 'json',
-        data : myJsonString
-    });
-    window.location.reload();
-  };
-
   var result2 = '{{result}}';
   result2 = result2.replace(/&#39;/gi,'')
   result2 = result2.replace(/{/gi,'')
@@ -152,6 +120,139 @@
 
     res_tbl.appendChild(trvalue)
   }
+
+  setInterval(function() {
+    getUpdatelist();
+  }, 3000);
+
+
+  function addItem(){
+    var value1 = sel1.value;
+    var text1 = sel1.options[sel1.selectedIndex].text;
+
+    var value2 = sel2.value;
+    var text2 = sel2.options[sel2.selectedIndex].text;
+
+    var option = document.createElement("option");
+    option.value = cnt+1;
+    option.text = text1+' <-> '+text2;
+    sellist.appendChild(new Option(option.text,option.value))
+    
+    cnt = cnt + 1;
+
+    var items = [];
+    var option = '';
+    for (var option of sellist.options)
+    {
+        items.push(option.text);
+
+    }
+
+    var selectedOne = [option.text];
+    selectedOne = JSON.stringify(selectedOne);
+    $.ajax({
+      type : 'post',
+      contentType : 'application/json',
+      url : '/test/add',
+      dataType : 'json',
+      data : selectedOne
+    });
+    getUpdatelist();
+    /*updatelist = updatelist.replaceAll(/&#34;/gi,'"');
+    var updatelist_json = JSON.parse(updatelist);
+    var updatelist = Object.keys(updatelist_json);
+    console.log(Object.keys(updatelist_json));*/
+
+  };
+
+  function removeItem(){ 
+    var len = sellist.options.length;
+    
+    var selected=[];
+    $('#sellist :selected').each(function(){
+        selected.push($(this).text());
+       });
+
+    console.log(selected);
+
+    selected = selected.filter(
+      (element) => true
+    );
+      
+    var tmp = []
+    selected.forEach((e, i) => {
+      tmp.push(e);
+    });
+
+    var selectedMulti = tmp;
+    selectedMulti = JSON.stringify(selectedMulti);
+    $.ajax({
+      type : 'post',
+      contentType : 'application/json',
+      url : '/test/delete',
+      dataType : 'json',
+      data : selectedMulti
+    });
+
+    for (var i=0 ; i < len ; i++){
+      sellist.options.remove(sellist.selectedIndex);
+    };
+
+  };
+
+  function getUpdatelist(){
+    var updatelist = {};
+    $.ajax({
+      type: 'POST',
+      url: '/updatelist',
+      data: updatelist,
+      success: function (data) {
+        data = data.replace('[','');
+        data = data.replace(']','');
+        data = data.replaceAll('"','');
+        data = data.split(', ');
+
+        console.log(data);
+
+        while (sellist.hasChildNodes()) {
+          sellist.removeChild(sellist.firstChild);
+        };
+
+        for (var i of data){
+          cnt = 0
+          var option = document.createElement("option");
+          option.value = cnt+1;
+          option.text = i;
+          sellist.appendChild(new Option(option.text,option.value))
+        };
+
+        
+      },
+      error: function (msg) {
+        alert(msg.responseText);
+      }
+    });
+  };
+
+  function getResult(){
+    var items = [];
+    for (var option of sellist.options)
+    {
+        items.push(option.text);
+    }
+    var myJsonString = JSON.stringify(items);
+    console.log(myJsonString)
+
+    $.ajax({
+        type : 'post',
+        contentType : 'application/json',
+        url : '/test/data',
+        dataType : 'json',
+        data : myJsonString
+    });
+    window.location.reload();
+  };
+
 
   // In your Javascript
   $(document).ready(function() {
@@ -178,16 +279,7 @@
       align-items: center;
       background-image: linear-gradient(45deg, #85b0f6 0%, #d5effb 100%);
   }
-  table {
-      text-align: center;
-  }
 
-  tbody td{
-    display:flex; 
-    justify-content: center; 
-    align-items: center;
-    width: 100%;
-  }
   .member {
       width:80%; 
       height:250px;
@@ -209,16 +301,7 @@
       font-weight: bold;
       border : none;
   }
-  .member td {
-      height: 100%;
-      border-radius: 4px;
-      border: none;
-  }
-  .member tr {
 
-      border-radius: 4px;
-      border: 1px solid #eee;
-  }
   .member select {
       font-size: x-large;
       border-radius: 4px;
@@ -231,10 +314,23 @@
       -moz-text-align-last: center;
   }
 
+  .member2 { 
+    width:80%; 
+    height:100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    background-color: #fff;
+    border-radius: 4px;
+    border : 1px solid #eee;
+  }
+
+
   input[type=button] {
       width: 55px;
       height:55px;
       background-color: orange;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);~
       color: white;
       border: none;
       border-radius: 4px;
@@ -252,6 +348,7 @@
       width:400px;
       height:50px;
       background-color: orange;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
       color: white;
       border: none;
       border-radius: 4px;
@@ -267,5 +364,37 @@
   border: 3px solid #555;
   }
 
-
+  .container1 {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    text-align: center;
+  }
+  .outer-div {
+    width : 50%;
+    left:20%;
+    float:left;
+  }
+  .inner-div {
+    width : 99%;
+    height: 30px;
+    text-align: center;
+    margin: auto;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .container2 {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+    font-size: 300px;
+  }
 </style>

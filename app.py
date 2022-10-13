@@ -1,3 +1,10 @@
+# ------------------------- *
+# Code By Yuns              |
+# SK Telecom Core Operator  |
+# Date : 2022 09            |
+# ------------------------- *
+
+from glob import glob
 from flask import Flask, render_template, jsonify
 from flask import request
 import plotly.figure_factory as ff 
@@ -16,6 +23,7 @@ import DBHandler
 app = Flask(__name__) 
 e = ErrPointHandler.ErrPointHandler()
 ip_route = e.df[e.sheet[0]] 
+sellist = []
 result = []
 
 #----- App. Route -----#
@@ -24,31 +32,49 @@ def index():
     negrp = generate_graph() 
     return render_template("index.html",plot=negrp)
 
-# @app.route("/errpoint",methods=['get','post'])
-# def errpoint():
-#     set_errpoint()
-#     negrp = generate_graph() 
-#     e.sd_merge = '//'.join([str(i) for i in list(e.sd_merge)])
-#     return render_template("errpoint.html",sd_merge=e.sd_merge,plot=negrp,result=e.res)
-
-# @app.route('/errpoint/data', methods=['GET','POST'])
-# def post():
-#     if request.method == 'POST':
-#         value = request.get_json(silent=True)
-#         res = cal_errpoint(value)
-#     return render_template('post.html')
+@app.route("/updatelist",methods=['get','post'])
+def get_sellist():
+    global sellist
+    updatelist = sellist
+    return json.dumps(updatelist)
 
 @app.route("/test",methods=['get','post'])
 def coreip_api():
+    global sellist
     set_errpoint()
     return render_template('test.html',source=e.source_json,destination=e.destination_json,result=e.res)
 
 @app.route("/test/data",methods=['get','post'])
 def post2():
+    global sellist
     if request.method == 'POST':
-        value = request.get_json(silent=True)
-        cal_errpoint(value)
+        cal_errpoint(sellist)
+        sellist = []
     return render_template('post.html')
+
+@app.route("/test/add",methods=['get','post'])
+def post3():
+    global sellist
+    if request.method == 'POST':
+        tmp = request.get_json(silent=True)
+        sellist.append(tmp[0])
+        print("가져온 목록 아래 첨부")
+        print(sellist)
+    return render_template('test.html')
+
+@app.route("/test/delete",methods=['get','post'])
+def post4():
+    global sellist
+    if request.method == 'POST':
+        tmp = request.get_json(silent=True)
+        print(tmp)
+        for i in tmp :
+            if i in sellist :
+                sellist.pop(sellist.index(i))
+        
+        # print(sellist)
+    return render_template('post.html')
+
 #----- Function -----#
 def generate_graph():
     negrp = NetworkGraphHandler()
@@ -79,4 +105,12 @@ def cal_errpoint(value):
     e.save_cal_point()
 
 if __name__=="__main__" :
+    print("* --------------------------- *")
+    print("| SK Telecom Core Operator    |")
+    print("| Code By : Yuns              |")
+    print("| Data : 2022.09              |")
+    print("|                             |")
+    print("|       'Hello, I'm Yuns'     |")
+    print("|                             |")
+    print("* --------------------------- *")
     app.run(debug=True,port=5000)
