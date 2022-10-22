@@ -113,4 +113,5 @@ if __name__=="__main__" :
     print("|       'Hello, I'm Yuns'     |")
     print("|                             |")
     print("* --------------------------- *")
-    app.run(debug=True,port=5000)
+    app.run(host='150.33.25.215',debug=True,port=5000)
+    
