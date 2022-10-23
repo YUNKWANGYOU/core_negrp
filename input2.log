@@ -1,21 +1,3 @@
-
-[ PGW_01 ] RTRV-NE-STS
-
-   PGW_01 2022-10-17 MON 00:17:48
-  M2509 RETRIEVE NETWORK ELEMENT STATUS - SUMMARY - [2/2] : COMPLD
-   NE_TYPE        CNT      INS      OOS     UNKN   DISP_CNTL
-   PCRF            10        6        4        0   -
-   PCSCF          118      118        0        0   SUPPRESSED
-   RAD_PNA         16       16        0        0   -
-   SGSN            78       78        0        0   SUPPRESSED
-   SGW             88       88        0        0   SUPPRESSED
-   ----------------------------------------------------------
-   TOTAL          310      306        4        0
-;
-
-
-
-
 [ PGW_01 ] TEST-TRC-ROUTE:DIP=172.28.55.95
 
    PGW_01 2022-10-17 MON 00:18:37
