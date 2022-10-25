@@ -49,7 +49,7 @@ def post2():
     global sellist
     if request.method == 'POST':
         cal_errpoint(sellist)
-        sellist = []
+        # sellist = []
     return render_template('post.html')
 
 @app.route("/test/add",methods=['get','post'])
