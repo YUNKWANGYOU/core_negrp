@@ -11,8 +11,6 @@ tgtServer=''
 clearTime='0300'
 currentTime=$(date +"%H%M")
 
-<<<<<<< HEAD
-=======
 # sysList에 속한 장비들의 RTRV-NE-STS; 수행하여 input1_${sysList[@]}.log로 저장하기
 for sysName in "${sysList[@]}"
 do
@@ -23,7 +21,6 @@ do
 done
 
 # 변수 선언
->>>>>>> 21d180df3b2d31336465a80835aee113a5d88c64
 declare -a priList_1
 declare -a priList_2
 declare -a secList_1
