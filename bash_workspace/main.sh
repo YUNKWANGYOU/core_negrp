@@ -52,26 +52,6 @@ for i in $(seq $cnt)
 do      
         (( i = "${i}" - 1 ))
 
-<<<<<<< HEAD
-# cnt=0
-
-# for sysName in $sysList
-# do
-#         while read line
-#         do
-#                 if [ "${cnt}" == 0 ]
-#                 then
-#                         cmd "$sysName" TEST-TRC-ROUTE:DIP="$line"; > res_main_${sysName}.log
-#                         (( cnt = "${cnt}" + 1 ))
-
-#                 else
-# 			cmd "$sysName" TEST-TRC-ROUTE:DIP="$line"; >> res_main_${sysName}.log
-
-# 		fi
-
-#         done < res_net_${sysName}.log
-# done
-=======
         echo
         for netName in ${netList[$i]}
         do
@@ -81,6 +61,5 @@ do
                 # echo $res_tmp > res_$i_$netName.log
         done
 done
->>>>>>> 21d180df3b2d31336465a80835aee113a5d88c64
 
 
