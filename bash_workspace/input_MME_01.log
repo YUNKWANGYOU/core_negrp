@@ -1,0 +1,265 @@
+
+
+ 
+
+[ MME_01 ] RTRV-NE-STS
+
+ 
+
+   MME_01 2022-11-11 FRI 09:36:18
+
+  M2509 RETRIEVE NETWORK ELEMENT STATUS : RTRV
+
+   NE_TYPE = ALL
+
+   ID      = ALL
+
+   STATUS  = ALL
+
+   /* COMMAND ACCEPTED */
+
+;
+
+ 
+
+ 
+
+[ MME_01 ] RTRV-NE-STS
+
+ 
+
+   MME_01 2022-11-11 FRI 09:36:19
+
+  M2509 RETRIEVE NETWORK ELEMENT STATUS - [1/3] : RTRV
+
+   NE_TYPE        ID   IP_ADDRESS        PORT   STS   DESCRIPTION
+
+   AUC            11   38.27.71.158      3868   INS   ss_auc_11.skt.co.kr
+
+                  12   38.27.71.174      3868   INS   ss_auc_12.skt.co.kr
+
+                  15   38.27.71.166      3868   INS   ss_auc_15.skt.co.kr
+
+                  21   38.107.71.158     3868   INS   ds_auc_21.skt.co.kr
+
+                  22   38.107.71.157     3868   INS   ds_auc_22.skt.co.kr
+
+                  25   38.107.71.166     3868   INS   ds_auc_25.skt.co.kr
+
+                 115   38.43.202.35      3868   INS   bd_hlrcs_115.hss.mnc005.mcc450.3gppnetwork.org
+
+                 116   38.43.202.156     3868   INS   bd_hlrcs_116.hss.mnc005.mcc450.3gppnetwork.org
+
+                 123   38.43.0.153       3868   INS   bd_hlrcs_123.hss.mnc005.mcc450.3gppnetwork.org
+
+                 165   38.107.80.54      3868   INS   ds_hlrcs_165.hss.mnc005.mcc450.3gppnetwork.org
+
+                 166   38.107.80.85      3868   INS   ds_hlrcs_166.hss.mnc005.mcc450.3gppnetwork.org
+
+                 171   38.107.2.196      3868   INS   ds_hlrcs_171.hss.mnc005.mcc450.3gppnetwork.org
+
+                 173   38.107.2.198      3868   INS   ds_hlrcs_173.hss.mnc005.mcc450.3gppnetwork.org
+
+                 215   38.11.60.113      3868   INS   br_hlrcs_215.hss.mnc005.mcc450.3gppnetwork.org
+
+                 216   38.11.70.37       3868   INS   br_hlrcs_216.hss.mnc005.mcc450.3gppnetwork.org
+
+                 223   38.11.70.72       3868   INS   br_hlrcs_223.hss.mnc005.mcc450.3gppnetwork.org
+
+   CBC             1   172.28.14.156    60812   INS   ITC_LTECBSC_01
+
+                   2   172.28.14.157    52943   OOS   ITC_LTECBSC_02
+
+                   3   172.28.160.88    35223   INS   BD_LTECBSC_BK
+
+                   4   172.28.160.82    43332   INS   BD_LTECBSC_BK_1
+
+                   5   172.28.160.83    41787   OOS   BD_LTECBSC_BK_2
+
+   DNS             1   211.234.228.2       53   INS   SSRDNS_01
+
+                   2   211.234.228.3       53   INS   SSRDNS_02
+
+                   3   211.234.228.253     53   INS   DSRDNS_03
+
+                   4   211.234.228.254     53   INS   DSRDNS_04
+
+   EIR             3   38.27.71.204      3868   INS   ss_eircs_1.skt.co.kr
+
+                   4   38.27.71.212      3868   INS   ss_eircs_2.skt.co.kr
+
+   ESMLC           1   38.43.242.31      9082   INS   BD_ESMLC_01
+
+                   2   38.43.242.32      9082   INS   BD_ESMLC_02
+
+   GMLC            0   38.43.242.17      3868   INS   tlc01.slp.mnc005.mcc450.3gppnetwork.org
+
+                   1   38.43.242.158     3868   OOS   slp01.slp.mnc005.mcc450.3gppnetwork.org
+
+                   2   38.43.242.159     3868   OOS   slp02.slp.mnc005.mcc450.3gppnetwork.org
+
+                   3   38.43.242.156     3868   OOS   slp03.slp.mnc005.mcc450.3gppnetwork.org
+
+                   4   38.43.242.157     3868   OOS   slp04.slp.mnc005.mcc450.3gppnetwork.org
+
+                   5   38.43.242.180     3868   INS   wmoa01.wmoa.mnc005.mcc450.3gppnetwork.org
+
+                   6   38.43.242.181     3868   INS   wmoa02.wmoa.mnc005.mcc450.3gppnetwork.org
+
+                   7   38.43.242.182     3868   INS   wmoa03.wmoa.mnc005.mcc450.3gppnetwork.org
+
+                   8   38.43.242.18      3868   INS   tlc02.slp.mnc005.mcc450.3gppnetwork.org
+
+                   9   38.43.242.19      3868   INS   tlc03.slp.mnc005.mcc450.3gppnetwork.org
+
+   HSS            11   38.11.60.204      3868   INS   mrg.skt.co.kr
+
+                 111   38.43.202.31      3868   INS   bd_hlrcs_111.hss.mnc005.mcc450.3gppnetwork.org
+
+                 112   38.43.202.152     3868   INS   bd_hlrcs_112.hss.mnc005.mcc450.3gppnetwork.org
+
+                 113   38.43.202.153     3868   INS   bd_hlrcs_113.hss.mnc005.mcc450.3gppnetwork.org
+
+                 114   38.43.202.34      3868   INS   bd_hlrcs_114.hss.mnc005.mcc450.3gppnetwork.org
+
+                 115   38.43.202.35      3868   INS   bd_hlrcs_115.hss.mnc005.mcc450.3gppnetwork.org
+
+                 116   38.43.202.156     3868   INS   bd_hlrcs_116.hss.mnc005.mcc450.3gppnetwork.org
+
+                 121   38.43.0.151       3868   INS   bd_hlrcs_121.hss.mnc005.mcc450.3gppnetwork.org
+
+                 122   38.43.0.22        3868   INS   bd_hlrcs_122.hss.mnc005.mcc450.3gppnetwork.org
+
+                 123   38.43.0.153       3868   INS   bd_hlrcs_123.hss.mnc005.mcc450.3gppnetwork.org
+
+                 161   38.107.80.50      3868   INS   ds_hlrcs_161.hss.mnc005.mcc450.3gppnetwork.org
+
+;
+
+ 
+
+ 
+
+   MME_01 2022-11-11 FRI 09:36:19
+
+  M2509 RETRIEVE NETWORK ELEMENT STATUS - [2/3] : RTRV
+
+   NE_TYPE        ID   IP_ADDRESS        PORT   STS   DESCRIPTION
+
+   HSS           162   38.107.80.81      3868   INS   ds_hlrcs_162.hss.mnc005.mcc450.3gppnetwork.org
+
+                 163   38.107.80.52      3868   INS   ds_hlrcs_163.hss.mnc005.mcc450.3gppnetwork.org
+
+                 164   38.107.80.83      3868   INS   ds_hlrcs_164.hss.mnc005.mcc450.3gppnetwork.org
+
+                 165   38.107.80.54      3868   INS   ds_hlrcs_165.hss.mnc005.mcc450.3gppnetwork.org
+
+                 166   38.107.80.85      3868   INS   ds_hlrcs_166.hss.mnc005.mcc450.3gppnetwork.org
+
+                 171   38.107.2.196      3868   INS   ds_hlrcs_171.hss.mnc005.mcc450.3gppnetwork.org
+
+                 172   38.107.2.229      3868   INS   ds_hlrcs_172.hss.mnc005.mcc450.3gppnetwork.org
+
+                 173   38.107.2.198      3868   INS   ds_hlrcs_173.hss.mnc005.mcc450.3gppnetwork.org
+
+                 211   38.11.60.78       3868   INS   br_hlrcs_211.hss.mnc005.mcc450.3gppnetwork.org
+
+                 212   38.11.70.38       3868   INS   br_hlrcs_212.hss.mnc005.mcc450.3gppnetwork.org
+
+                 213   38.11.60.80       3868   INS   br_hlrcs_213.hss.mnc005.mcc450.3gppnetwork.org
+
+                 214   38.11.70.4        3868   INS   br_hlrcs_214.hss.mnc005.mcc450.3gppnetwork.org
+
+                 215   38.11.60.113      3868   INS   br_hlrcs_215.hss.mnc005.mcc450.3gppnetwork.org
+
+                 216   38.11.70.37       3868   INS   br_hlrcs_216.hss.mnc005.mcc450.3gppnetwork.org
+
+                 221   38.11.70.70       3868   INS   br_hlrcs_221.hss.mnc005.mcc450.3gppnetwork.org
+
+                 222   38.11.70.101      3868   INS   br_hlrcs_222.hss.mnc005.mcc450.3gppnetwork.org
+
+                 223   38.11.70.72       3868   INS   br_hlrcs_223.hss.mnc005.mcc450.3gppnetwork.org
+
+                 290   38.11.80.132      3868   INS   lteglr01.epc.mnc005.mcc450.3gppnetwork.org
+
+                 291   38.107.80.56      3868   INS   lteglr02.epc.mnc005.mcc450.3gppnetwork.org
+
+   MSCS            7   172.28.121.188   29118   INS   DS_WMSC_207
+
+                  10   172.28.11.180    29118   INS   BR_WMSC_210
+
+                  11   172.28.11.188    29118   INS   BR_WMSC_211
+
+                  19   172.28.11.196    29118   INS   BR_WMSC_219
+
+                  21   172.28.11.212    29118   INS   BR_WMSC_221
+
+                  24   172.28.11.220    29118   INS   BR_WMSC_224
+
+                  27   172.28.11.228    29118   INS   BR_WMSC_227
+
+                  28   172.28.121.204   29118   INS   DS_WMSC_228
+
+                  29   172.28.31.180    29118   INS   SY_WMSC_229
+
+                  30   172.28.31.188    29118   INS   SY_WMSC_230
+
+                  31   172.28.31.196    29118   INS   SY_WMSC_231
+
+                  35   172.28.11.236    29118   INS   BR_WMSC_235
+
+                  37   172.28.121.212   29118   INS   DS_WMSC_237
+
+                  46   172.28.121.220   29118   INS   DS_WMSC_246
+
+   MSCV            0   192.168.3.23      2123   INS   SY_IMG1
+
+                   1   192.168.162.103   2123   INS   ITC_IMG2
+
+                   2   192.168.162.231   2123   INS   BR_IMG3
+
+;
+
+ 
+
+ 
+
+   MME_01 2022-11-11 FRI 09:36:19
+
+  M2509 RETRIEVE NETWORK ELEMENT STATUS - SUMMARY - [3/3] : COMPLD
+
+   NE_TYPE        CNT      INS      OOS     UNKN   DISP_CNTL
+
+   AUC             16       16        0        0   -
+
+   CBC              5        3        2        0   -
+
+   DNS              4        4        0        0   -
+
+   EIR              2        2        0        0   -
+
+   ESMLC            2        2        0        0   -
+
+   GMLC            10        6        4        0   -
+
+   HSS             30       30        0        0   -
+
+   MME             35       31        4        0   SUPPRESSED
+
+   MSCS            14       14        0        0   -
+
+   MSCV             3        3        0        0   -
+
+   SGSN            31       31        0        0   SUPPRESSED
+
+   SGW             40       40        0        0   SUPPRESSED
+
+   SMC             33       29        4        0   SUPPRESSED
+
+   ----------------------------------------------------------
+
+   TOTAL          225      211       14        0
+
+;
+
+ 
