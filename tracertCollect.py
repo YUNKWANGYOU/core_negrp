@@ -1,6 +1,7 @@
 import sys
+from imp import reload
 reload(sys) 
-sys.setdefaultencoding('utf-8')
+print(sys.getdefaultencoding())
 import socket
 from datetime import datetime
 import os 
@@ -9,7 +10,7 @@ os.chdir('/home/ssnoc/core_negrp/tracertData')
 preFix = "tracert"
 sufFix = ".log"
 
-bindIP = "60.30.39.123"
+bindIP = "150.33.25.215"
 bindPORT = 9999
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((bindIP,bindPORT))
