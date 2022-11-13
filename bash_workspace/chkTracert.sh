@@ -15,12 +15,11 @@ errLog="$logDir/errLog_tracert.log"
 targetServer='*.*.*.*/*'
 
 # sysList에 속한 장비들의 RTRV-NE-STS; 수행하여 input1_${sysList[@]}.log로 저장하기
-for sysName in "${sysList[@]}"
+for sysName in "${sysList[@]}"1
 do
         # 실제 CN_EMS에서는 아래 주석처리 된 두 줄의 커맨드 이용 예정
         echo "cmd ${sysName} RTRV-NE-STS;" 
-        # input_tmp=$(cmd ${sysName} RTRV-NE-STS;)
-        # echo $input_tmp > /home/cnems/tracert/input_${sysName}.log
+        # $(cmd ${sysName} RTRV-NE-STS;) > /home/cnems/tracert/input_${sysName}.log
 done
 
 # 변수 선언
@@ -36,7 +35,7 @@ do
         secList[$cnt]=$(awk '$3 ~ /\./ { print $3 }' input_${sysName}.log)
 
         # 합치기
-        netList[$cnt]="$priList $secList"
+        targetList[$cnt]="$priList $secList"
 
         (( cnt = "${cnt}" + 1 ))
 done
@@ -47,12 +46,11 @@ do
         (( i = "${i}" - 1 ))
 
         echo
-        for netName in ${netList[$i]}
+        for targetIP in ${targetList[$i]}
         do
                 # 실제 CN_EMS에서는 아래 주석처리 된 두 줄의 커맨드 이용 예정
-                echo "cmd ${sysList[$i]} TEST-TRC-ROUTE:DIP=$netName;" 
-                # res_tmp=$(cmd ${sysList[$i]} TEST-TRC-ROUTE:DIP=$netName;)
-                # echo $res_tmp > res_$i_$netName.log
+                echo "cmd ${sysList[$i]} TEST-TRC-ROUTE:DIP=$targetIP;" 
+                # $(cmd ${sysList[$i]} TEST-TRC-ROUTE:DIP=$netName;) > res_$i_$netName.log
         done
 done
 
