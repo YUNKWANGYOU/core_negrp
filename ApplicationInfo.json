@@ -1,0 +1,15 @@
+{
+    "mysql_db" : {
+        "host" : "150.33.25.215",
+        "user" : "mydb",
+        "charset" : "utf8",
+        "passwd" : "tjdtn_12"
+    },
+    "local_db" : {
+        "host" : "127.0.0.1",
+        "user" : "root",
+        "charset" : "utf8",
+        "passwd" : "dk_tk_4745"
+    }
+
+}
